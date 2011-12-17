@@ -1,0 +1,80 @@
+<html>
+<head>
+    <title>IM Session</title>
+</head>
+<body>
+    <textarea id="messages" rows="20" cols="160"></textarea><br/>
+    <input type="text" id="new_message" size="160"/><input type="button" value="Send" id="btnSend"/>
+    <script src="/_ah/channel/jsapi"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+        // show the archived messages and initial message
+        function add_archives() {
+            var new_messages = "";
+            {% for message in archived_messages %}
+                var new_message = "[{{ message.timestamp }}] {{ message.author }}: {{ message.message }}\n"
+                new_messages = new_message + new_messages;
+            {% endfor %} 
+            new_messages = "Archived Messages:\n" + new_messages;
+            new_messages += "{{ initial_message }}\n";
+            $("#messages").html(new_messages);
+        }
+
+        function onOpen() {
+            console.log("channel opened");
+        }
+
+        // receive a new message
+        function onMessage(m) {
+            var message = JSON.parse(m.data);
+            var new_message = "[" + message.timestamp + "] " + message.author + ": " + message.message + "\n"
+            var messages = $("#messages").html();
+            messages += new_message;
+            $("#messages").html(messages);
+        }
+
+        function onSuccess() {
+            
+        }
+        
+        $(function() {
+            var channel = new goog.appengine.Channel('{{ token }}');
+            console.log('{{ token }}');
+            var handler = {
+                'onopen': onOpen,
+                'onmessage': onMessage,
+                'onerror': function() {},
+                'onclose': function() {}
+            };
+            var socket = channel.open(handler);
+            socket.onopen = onOpen;
+            socket.onmessage = onMessage;
+
+            add_archives();
+
+            // send a new message
+            $("#btnSend").click(function() {
+                var new_message = $("#new_message").val();
+                var author = "{{ current_user }}";
+                var sid = "{{ sid }}";
+                
+                var data = {
+                    "new_message": new_message,
+                    "author": author,
+                    "sid": sid
+                };
+
+                var type = "POST";
+                var url = "/new_message";
+
+                $.ajax({
+                    url: url,
+                    data: data,
+                    type: type,
+                    success: onSuccess
+                });
+            });
+        });
+    </script>
+</body>
+</html>

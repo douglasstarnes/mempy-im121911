@@ -1,0 +1,15 @@
+application: mempy-im
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /FriendService.*
+  script: FriendService.py
+
+- url: /styles
+  static_dir: styles
+
+- url: /.*
+  script: main.py
+

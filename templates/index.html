@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>MemPy IM</title>
+    <link rel="stylesheet" href="/styles/styles.css" type="text/css"/>
+</head>
+<body>
+    {{ nickname }}
+    {% for friend in online_friends %}
+        {% if friend.logged_in %}
+            <div class="logged_in">** {{ friend.nickname }} <a href="#" nick="{{ friend.nickname }}" class="start_im">Start IM Session</a></div>
+        {% else %}
+            <div class="not_logged_in">** {{ friend.nickname }}</div>
+        {% endif %}
+    {% endfor %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/_ah/channel/jsapi"></script>
+    <script>
+        function generateIMSessionID() {
+            return Math.floor(Math.random() * 1000000000);
+        }
+
+        // invitiation to chat via Channel API
+        function onMessage(m) {
+            var data = JSON.parse(m.data);
+            var message = "You have been invited to chat with " + data.host + ".  Click OK to accept, Cancel to decline.";
+            var url = "/begin_im?nickname=" + data.host + "&sid=" + data.sid;
+            var accept = confirm(message);
+            if (accept)
+                window.location = url;
+        }
+
+        function onOpen() {
+            console.log('channel opened');
+        }
+
+        $(function() {
+            // create a new channel using the token passed to the template
+            var channel = new goog.appengine.Channel('{{ token }}');
+            // set up event handlers and open the connection
+            var handler = {
+                'onopen': onOpen,
+                'onmessage': onMessage,
+                'onerror': function() {},
+                'onclose': function() {}
+            };
+            var socket = channel.open(handler);
+            socket.onopen = onOpen;
+            socket.onmessage = onMessage;
+
+            // send an invitiation to chat
+            $(".start_im").click(function() {
+                var sid = generateIMSessionID();
+                var nickname = $(this).attr("nick");
+                var url = "/begin_im?nickname=" + nickname + "&sid=" + sid;
+                window.location = url;
+            });
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+.not_logged_in {
+    color: #ff0000;
+}
+
+.logged_in {
+    color: #009900;
+}

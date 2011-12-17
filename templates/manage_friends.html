@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title>Manage Friends</title>
+</head>
+<body>
+    Name of Friend: <input type="text" id="name_of_friend"><br/>
+    Action: <select id="selected_action">
+        <option value="add">Add</option>
+        <option value="remove">Remove</option>
+    </select><br/>
+    <input type="button" value="Do it!" id="do_it"/>
+    <div id="output"></div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+        $(function() {
+             $("#do_it").click(function(){
+                 var name_of_friend = $("#name_of_friend").val();
+                 var selected_action = $("#selected_action").val();
+
+                 // parameters to FriendServiceAction in FriendService.py
+                 var data = '{"nickname":"' + name_of_friend + '","action":"' + selected_action + '"}';
+
+                 // get the hostname
+                 var url = window.location.href.substring(7);
+                 url = url.substring(0, url.indexOf("/"));
+                 url = "http://" + url + "/FriendService.manage_friends";
+
+                 // must be a POST
+                 var method = "POST";
+
+                 // must be JSON
+                 var headers = {"content-type":"application/json"};
+
+                 // expect JSON object return
+                 var dataType = "json";
+
+                 var success = function(data) {
+                     $("#output").html(data.error);
+                 }
+
+                 $.ajax({
+                     url: url,
+                     headers: headers,
+                     data: data,
+                     dataType: dataType,
+                     type: method,
+                     success: success
+                 });
+             })
+        });
+    </script>
+</body>
+</html>

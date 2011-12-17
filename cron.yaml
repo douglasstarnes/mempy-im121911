@@ -1,0 +1,4 @@
+cron:
+- description: automatically log out users
+  url: /logout_cron
+  schedule: every 5 minutes
