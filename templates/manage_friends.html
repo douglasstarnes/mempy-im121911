@@ -1,14 +1,37 @@
 <html>
 <head>
     <title>Manage Friends</title>
+    <link rel="stylesheet" href="/styles/styles.css" type="text/css"/>
 </head>
 <body>
-    Name of Friend: <input type="text" id="name_of_friend"><br/>
-    Action: <select id="selected_action">
-        <option value="add">Add</option>
-        <option value="remove">Remove</option>
-    </select><br/>
-    <input type="button" value="Do it!" id="do_it"/>
+    <ul id="nav">
+        <li>
+            <a href="/">Home</a>
+        </li>
+        <li>
+            <a href="/manage_friends">Manage Friends</a>
+        </li>
+    </ul>
+    <div class="clear">&nbsp;</div>
+    <table>
+        <tr>
+            <td>Name of Friend: </td><td><input type="text" id="name_of_friend" size="100"/></td>
+        </tr>
+        <tr>
+            <td>Action:</td>
+            <td> 
+                <select id="selected_action">
+                    <option value="add">Add</option>
+                    <option value="remove">Remove</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Do it!" id="do_it"/>
+            </td>
+        </tr>
+    </table>
     <div id="output"></div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script>

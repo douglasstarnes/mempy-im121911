@@ -44,15 +44,20 @@ class FriendService(remote.Service):
             elif request.action == "remove":
                 q = db.GqlQuery("select * from IMUser where nickname=:1", current_user.nickname())
                 if q.count > 0:
-                    try:
-                        record = q[0]
-                        record.friends.remove(request.nickname) # will raise ValueError if request.nickname is not in friends
-                        q[0].delete()
-                        record.put()
-                        error = "removed %s" % (request.nickname)
-                    except ValueError:
-                        # trying to remove a value not in a list raises ValueError
-                        error = "could not find %s in your friend list" % (request.nickname)
+                    if current_user.nickname() == request.nickname:
+                        error = "cannot remove yourself from the friend list"
+                    else:
+                        try:
+                            record = q[0]
+                            record.friends.remove(request.nickname) # will raise ValueError if request.nickname is not in friends
+                            q[0].delete()
+                            record.put()
+                            error = "removed %s" % (request.nickname)
+                        except ValueError:
+                            # trying to remove a value not in a list raises ValueError
+                            error = "could not find %s in your friend list" % (request.nickname)
+                else:
+                    error = "could not find %s in your friend list" % (request.nickname)
             else:
                 pass
         else:

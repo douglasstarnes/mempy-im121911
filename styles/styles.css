@@ -1,7 +1,36 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Arial;
+    color: #333;
+}
+
+body {
+    margin: 10px;
+}
+
+#nav {
+    list-style-type: none;
+}
+
+#nav li {
+    display: block;
+    float: left;
+    margin-right: 5px;
+}
+
 .not_logged_in {
     color: #ff0000;
 }
 
 .logged_in {
     color: #009900;
+}
+
+.clear {
+    clear: both;
+}
+
+#online_friends {
+    margin-left: 10px;
 }

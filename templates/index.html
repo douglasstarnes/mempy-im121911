@@ -4,14 +4,27 @@
     <link rel="stylesheet" href="/styles/styles.css" type="text/css"/>
 </head>
 <body>
-    {{ nickname }}
+    <ul id="nav">
+        <li>
+            <a href="/">Home</a>
+        </li>
+        <li>
+            <a href="/manage_friends">Manage Friends</a>
+        </li>
+    </ul>
+    <div class="clear">&nbsp;</div>
+    Friends for: {{ nickname }}
+    <table id="online_friends">
     {% for friend in online_friends %}
+        <tr>
         {% if friend.logged_in %}
-            <div class="logged_in">** {{ friend.nickname }} <a href="#" nick="{{ friend.nickname }}" class="start_im">Start IM Session</a></div>
+            <td><div class="logged_in">** {{ friend.nickname }}</div></td><td><a href="#" nick="{{ friend.nickname }}" class="start_im">Start IM Session</a></td>
         {% else %}
-            <div class="not_logged_in">** {{ friend.nickname }}</div>
+            <td><div class="not_logged_in">** {{ friend.nickname }}</div></td>
         {% endif %}
+        </tr>
     {% endfor %}
+    <table>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="/_ah/channel/jsapi"></script>
     <script>
