@@ -14,7 +14,7 @@ import logging
 #input
 class FriendServiceAction(messages.Message):
     action = messages.StringField(1, required=True)
-    nickname = messages.StringFiel
+    nickname = messages.StringField(2, required=True)
 
 #output
 class FriendServiceActionResponse(messages.Message):
